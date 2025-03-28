@@ -13,35 +13,55 @@
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験対象</label>
+        <label class="block text-gray-700">Function Name</label>
         <input v-model="testItem.subject" type="text" class="w-full border rounded px-3 py-2">
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験観点</label>
+        <label class="block text-gray-700">Keyword of Function</label>
         <textarea v-model="testItem.perspective" class="w-full border rounded px-3 py-2"></textarea>
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験条件</label>
+        <label class="block text-gray-700">Transport Unit</label>
         <textarea v-model="testItem.conditions" class="w-full border rounded px-3 py-2"></textarea>
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験手順</label>
+        <label class="block text-gray-700">Location</label>
         <textarea v-model="testItem.steps" class="w-full border rounded px-3 py-2"></textarea>
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験期待値</label>
+        <label class="block text-gray-700">Situation</label>
         <textarea v-model="testItem.expectedResult" class="w-full border rounded px-3 py-2"></textarea>
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700">試験実施予定者</label>
+        <label class="block text-gray-700">Test ID</label>
+        <textarea v-model="testItem.expectedResult" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700">Test ID(Old)</label>
+        <textarea v-model="testItem.expectedResult" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700">Transport pattern & Procedure</label>
+        <textarea v-model="testItem.expectedResult" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700">Expected result</label>
+        <textarea v-model="testItem.expectedResult" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700">Scheduled Tester</label>
         <select v-model="testItem.scheduledTester" class="w-full border rounded px-3 py-2">
           <option value="" disabled>選択してください</option>
-          <option v-for="tester in scheduledTesters" :key="tester.id" :value="tester.id">
+          <option v-for="tester in scheduledTesters" :key="tester.id" :value="tester">
             {{ tester.name }}
           </option>
         </select>
@@ -64,16 +84,25 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 const testItem = ref({
-  subject: '',
-  perspective: '',
-  conditions: '',
-  steps: '',
-  expectedResult: '',
-  scheduledTester: '',
   category: {
     id: 0,
     name: '',
   },
+  funcName: '',
+  keyword: '',
+  transUnit: '',
+  location: '',
+  testId: '',
+  testIdOld: '',
+  transPtnProd: '',
+  expResult: '',
+  topic: '',
+  plan: false,
+  sim: '',
+  scheduledTester: {
+    id: 0,
+    name: '',
+  }
 });
 
 const scheduledTesters = ref([]);

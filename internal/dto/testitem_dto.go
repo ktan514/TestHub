@@ -14,6 +14,6 @@ type TestItemDTO struct {
 	Conditions      string          `json:"conditions"`
 	Steps           string          `json:"steps"`
 	ExpectedResult  string          `json:"expectedResult"`
-	ScheduledTester string          `json:"scheduledTester"`
+	ScheduledTester UserDTO         `json:"scheduledTester"`
 	Category        TestCategoryDTO `json:"category"`
 }

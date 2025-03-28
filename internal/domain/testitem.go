@@ -14,7 +14,7 @@ type TestItem struct {
 	Conditions      string
 	Steps           string
 	ExpectedResult  string
-	ScheduledTester string
+	ScheduledTester User
 	Category        TestCategory
 }
 

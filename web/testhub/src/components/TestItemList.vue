@@ -27,7 +27,7 @@
         <tr v-for="item in testItems" :key="item.id">
           <td class="border px-4 py-2">{{ item.subject }}</td>
           <td class="border px-4 py-2">{{ item.perspective }}</td>
-          <td class="border px-4 py-2">{{ item.scheduledTester }}</td>
+          <td class="border px-4 py-2">{{ item.scheduledTester.name }}</td>
           <td class="border px-4 py-2">{{ item.expectedResult }}</td>
         </tr>
       </tbody>

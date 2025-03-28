@@ -41,13 +41,16 @@ func (ctrl *TestItemController) GetTestItems(c echo.Context) error {
 	testItemDTOs := make([]dto.TestItemDTO, len(items))
 	for i, item := range items {
 		testItemDTOs[i] = dto.TestItemDTO{
-			ID:              item.ID,
-			Subject:         item.Subject,
-			Perspective:     item.Perspective,
-			Conditions:      item.Conditions,
-			Steps:           item.Steps,
-			ExpectedResult:  item.ExpectedResult,
-			ScheduledTester: item.ScheduledTester,
+			ID:             item.ID,
+			Subject:        item.Subject,
+			Perspective:    item.Perspective,
+			Conditions:     item.Conditions,
+			Steps:          item.Steps,
+			ExpectedResult: item.ExpectedResult,
+			ScheduledTester: dto.UserDTO{
+				ID:   item.ScheduledTester.ID,
+				Name: item.ScheduledTester.Name,
+			},
 			Category: dto.TestCategoryDTO{
 				ID:   item.Category.ID,
 				Name: item.Category.Name,
@@ -67,13 +70,16 @@ func (ctrl *TestItemController) AddTestItem(c echo.Context) error {
 
 	// DTOからDomainに変換する
 	item := domain.TestItem{
-		ID:              testItemDTO.ID,
-		Subject:         testItemDTO.Subject,
-		Perspective:     testItemDTO.Perspective,
-		Conditions:      testItemDTO.Conditions,
-		Steps:           testItemDTO.Steps,
-		ExpectedResult:  testItemDTO.ExpectedResult,
-		ScheduledTester: testItemDTO.ScheduledTester,
+		ID:             testItemDTO.ID,
+		Subject:        testItemDTO.Subject,
+		Perspective:    testItemDTO.Perspective,
+		Conditions:     testItemDTO.Conditions,
+		Steps:          testItemDTO.Steps,
+		ExpectedResult: testItemDTO.ExpectedResult,
+		ScheduledTester: domain.User{
+			ID:   testItemDTO.ScheduledTester.ID,
+			Name: testItemDTO.ScheduledTester.Name,
+		},
 		Category: domain.TestCategory{
 			ID:   testItemDTO.Category.ID,
 			Name: testItemDTO.Category.Name,
