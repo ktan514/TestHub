@@ -1,35 +1,45 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+.form-container {
+  /* フォーム全体の最大幅を広げる */
+  max-width: 900px;
+  /* 中央揃え */
+  margin: auto;
+  overflow: auto;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: rgb(173, 239, 217);
-  transition: 0.4s;
-  padding: 3px;
+.form-group {
+  display: flex;
+  align-items: top;
+  margin-bottom: 10px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.form-group label {
+  width: 250px;
+  /* ラベルの幅を統一 */
+  text-align: left;
+  margin-right: 10px;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  flex: 1;
+  /* 入力欄を可能な限り広げる */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.form-group textarea {
+  /* 親要素の幅いっぱいに広げる */
+  width: 100%;
+  /* 最小幅を指定（狭くなりすぎないように） */
+  min-width: 300px;
+  /* 必要に応じて最大幅を指定 */
+  max-width: 800px;
+  /* 最小の高さ */
+  min-height: 80px;
+  /* ユーザーが高さを変更可能にする */
+  resize: vertical;
 }

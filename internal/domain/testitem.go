@@ -8,18 +8,20 @@
 package domain
 
 type TestItem struct {
-	ID              int
-	Subject         string
-	Perspective     string
-	Conditions      string
-	Steps           string
-	ExpectedResult  string
-	ScheduledTester User
+	ID              string
+	Situation       string
+	Purpose         string
+	Operation       string
+	ExpResult       string
+	Topic           string
 	Category        TestCategory
+	ScheduledTester User
 }
 
 type TestItemRepository interface {
 	FindAll() ([]TestItem, error)
+	FindByID(id string) (TestItem, error)
 	FindByCategory(id int) ([]TestItem, error)
 	Save(item TestItem) error
+	Delete(id string) error
 }

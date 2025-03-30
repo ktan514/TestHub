@@ -8,8 +8,7 @@
 package dto
 
 type UserDTO struct {
-	ID            int    `json:"id"`    // ID
-	Name          string `json:"name"`  // 名前
-	Role          int    `json:"role"`  // 役割り
-	Administrator int    `json:"admin"` // 管理者権限フラグ
+	ID   int    `json:"id"`   // ID
+	Name string `json:"name"` // 名前
+	Role int    `json:"role"` // 役割り
 }

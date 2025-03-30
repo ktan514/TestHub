@@ -40,13 +40,25 @@ func NewRouter() *echo.Echo {
 		e.GET("/api/categories", testCategoryController.GetTestCategories)
 	}
 
+	// ユーザールーティング
+	{
+		repo := gateway.NewUserRepository()
+		u := usecase.NewUserUsecase(repo)
+		userController := controller.NewUserController(u)
+		e.GET("/api/users", userController.GetUsers)
+		e.POST("/api/login", userController.Login)
+	}
+
 	// テスト項目ルーティング
 	{
 		repo := gateway.NewTestItemRepository()
 		u := usecase.NewTestItemUsecase(repo)
 		testItemController := controller.NewTestItemController(u)
 		e.GET("/api/testitems", testItemController.GetTestItems)
-		e.POST("/api/testitems", testItemController.AddTestItem)
+		e.DELETE("/api/testitems", testItemController.DelTestItems)
+
+		e.POST("/api/testitem", testItemController.AddTestItem)
+		e.GET("/api/testitem", testItemController.GetTestItem)
 	}
 
 	return e

@@ -7,30 +7,53 @@
 
 package usecase
 
-import "testhub/internal/domain"
+import (
+	"fmt"
+	"testhub/internal/domain"
+)
 
-type TestItemUsecase interface {
+type TestItemUsecaseInterface interface {
 	GetAll() ([]domain.TestItem, error)
+	GetByID(id string) (domain.TestItem, error)
 	GetByCategory(id int) ([]domain.TestItem, error)
 	Create(item domain.TestItem) error
+	Update(item domain.TestItem) error
+	Delete(id []string) error
 }
 
-type testItemUsecase struct {
+type TestItemUsecase struct {
 	repo domain.TestItemRepository
 }
 
-func NewTestItemUsecase(r domain.TestItemRepository) TestItemUsecase {
-	return &testItemUsecase{repo: r}
+func NewTestItemUsecase(r domain.TestItemRepository) TestItemUsecaseInterface {
+	return &TestItemUsecase{repo: r}
 }
 
-func (u *testItemUsecase) GetAll() ([]domain.TestItem, error) {
+func (u *TestItemUsecase) GetAll() ([]domain.TestItem, error) {
 	return u.repo.FindAll()
 }
 
-func (u *testItemUsecase) GetByCategory(id int) ([]domain.TestItem, error) {
+func (u *TestItemUsecase) GetByID(id string) (domain.TestItem, error) {
+	return u.repo.FindByID(id)
+}
+
+func (u *TestItemUsecase) GetByCategory(id int) ([]domain.TestItem, error) {
 	return u.repo.FindByCategory(id)
 }
 
-func (u *testItemUsecase) Create(item domain.TestItem) error {
+func (u *TestItemUsecase) Create(item domain.TestItem) error {
 	return u.repo.Save(item)
+}
+
+func (u *TestItemUsecase) Update(item domain.TestItem) error {
+	return u.repo.Save(item)
+}
+
+func (u *TestItemUsecase) Delete(ids []string) error {
+	for _, id := range ids {
+		if err := u.repo.Delete(id); err != nil {
+			return fmt.Errorf("ID %s の削除に失敗しました: %w", id, err)
+		}
+	}
+	return nil
 }

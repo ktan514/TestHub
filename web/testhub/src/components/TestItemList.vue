@@ -13,22 +13,33 @@
       </select>
     </div>
 
+    <button type="button" @click="handleModify" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2">
+      編集
+    </button>
+    <button type="button" @click="handleRemove" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2">
+      削除
+    </button>
+
     <!-- 試験項目一覧表示 -->
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse border-gray-400">
       <thead>
         <tr class="bg-gray-200">
-          <th class="border px-4 py-2">試験対象</th>
-          <th class="border px-4 py-2">試験観点</th>
-          <th class="border px-4 py-2">実施予定者</th>
-          <th class="border px-4 py-2">期待値</th>
+          <th class="" hidden></th>
+          <th class="border border-gray-400 px-4 py-2">Test ID</th>
+          <th class="border border-gray-400 px-4 py-2">Situation</th>
+          <th class="border border-gray-400 px-4 py-2">Topic</th>
+          <th class="border border-gray-400 px-4 py-2">Scheduled Tester</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in testItems" :key="item.id">
-          <td class="border px-4 py-2">{{ item.subject }}</td>
-          <td class="border px-4 py-2">{{ item.perspective }}</td>
-          <td class="border px-4 py-2">{{ item.scheduledTester.name }}</td>
-          <td class="border px-4 py-2">{{ item.expectedResult }}</td>
+        <tr v-for="item in testItems" :key="item.id" :class="{ 'bg-blue-200': selectedRows.includes(item.id), 'cursor-pointer': true }" @click="toggleRowSelection(item.id)">
+          <td class="" hidden>
+            <input type="checkbox" :value="item.id" v-model="selectedRows" />
+          </td>
+          <td class="border border-gray-400 px-4 py-2">{{ item.id }}</td>
+          <td class="border border-gray-400 px-4 py-2">{{ item.situation }}</td>
+          <td class="border border-gray-400 px-4 py-2">{{ item.topic }}</td>
+          <td class="border border-gray-400 px-4 py-2">{{ item.scheduledTester.name }}</td>
         </tr>
       </tbody>
     </table>
@@ -38,30 +49,104 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import router from '@/router';
 
 const categories = ref([]);
-const selectedCategory = ref('');
+const selectedCategory = ref(0);
 const testItems = ref([]);
+const selectedRows = ref([]); // 選択された行のIDを格納
 
-// カテゴリー一覧を取得
 onMounted(async () => {
-  categories.value = await axios.get('/api/categories').then(res => res.data);
+  // Test Categoryの選択アイテム
+  await loadTestCategorySelectBox();
 });
 
-// 分類に応じた試験項目を取得する関数
+// 分類に応じた試験項目を取得する
 const fetchTestItems = async () => {
   if (selectedCategory.value) {
-    testItems.value = await axios.get(`/api/testitems?category=${selectedCategory.value}`)
+    const params = { categoryId: selectedCategory.value };
+    testItems.value = await axios.get('/api/testitems', { params })
       .then(res => res.data);
   } else {
     testItems.value = [];
   }
+  // 選択をクリアする
+  selectedRows.value.splice(0)
+};
+
+// 行くリック時に選択状態を切り替える
+const toggleRowSelection = (id) => {
+  const index = selectedRows.value.indexOf(id);
+  if (index === -1) {
+    selectedRows.value.push(id);
+  } else {
+    selectedRows.value.splice(index, 1);
+  }
+};
+
+// 編集ボタン押下時の処理
+const handleModify = () => {
+  const category = selectedCategory.value;
+  const selectedIds = selectedRows.value;
+  router.push({ path: '/testItemEdit', query: { category, selectedIds } })
+};
+
+// キャンセルボタン押下時の処理
+const handleRemove = async () => {
+  const selectedIds = selectedRows.value;
+
+  if (selectedIds.length === 0) {
+    alert("削除する項目を選択してください。");
+    return;
+  }
+
+  // 確認ダイアログを一度だけ表示
+  if (!confirm(`選択した ${selectedIds.length} 件を削除しますか？`)) {
+    return;
+  }
+
+  try {
+    // バルク削除
+    const params = { ids: selectedIds };
+    await axios.delete("/api/testitems", { params });
+
+    alert("削除しました。");
+
+    // 削除後、一覧を更新
+    fetchTestItems(); // ここで一覧を再取得する関数を呼び出す
+  } catch (error) {
+    console.error("削除エラー:", error);
+    alert("削除に失敗しました。");
+  }
+};
+
+// 試験カテゴリー選択ボックスの要素を取得する
+const loadTestCategorySelectBox = async () => {
+  categories.value = await axios.get('/api/categories')
+    .then(res => res.data);
+  console.log(categories.value);
 };
 </script>
 
 <style scoped>
-table th,
+table {
+  border-collapse: collapse;
+}
+
 table td {
-  text-align: left;
+  padding: 5px;
+}
+
+table th {
+  padding: 5px;
+}
+
+.border-gray-400 {
+  border: 1px solid gray;
+  min-width: 100px;
+}
+
+.bg-blue-200 {
+  background-color: #3dae7b80;
 }
 </style>

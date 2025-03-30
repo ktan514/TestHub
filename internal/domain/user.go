@@ -11,5 +11,11 @@ type User struct {
 	ID            int    // ID
 	Name          string // 名前
 	Role          int    // 役割り
-	Administrator int    // 管理者権限フラグ
+	Password      string
+}
+
+type UserRepository interface {
+	FindAll() ([]User, error)
+	FindByUserName(name string) (User, error)
+	Save(item User) error
 }

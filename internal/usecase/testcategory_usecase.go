@@ -9,23 +9,23 @@ package usecase
 
 import "testhub/internal/domain"
 
-type TestCategoryUsecase interface {
+type TestCategoryUsecaseInterface interface {
 	GetAll() ([]domain.TestCategory, error)
 	Create(item domain.TestCategory) error
 }
 
-type testCategoryUsecase struct {
+type TestCategoryUsecase struct {
 	repo domain.TestCategoryRepository
 }
 
-func NewTestCategoryUsecase(r domain.TestCategoryRepository) TestCategoryUsecase {
-	return &testCategoryUsecase{repo: r}
+func NewTestCategoryUsecase(r domain.TestCategoryRepository) TestCategoryUsecaseInterface {
+	return &TestCategoryUsecase{repo: r}
 }
 
-func (u *testCategoryUsecase) GetAll() ([]domain.TestCategory, error) {
+func (u *TestCategoryUsecase) GetAll() ([]domain.TestCategory, error) {
 	return u.repo.FindAll()
 }
 
-func (u *testCategoryUsecase) Create(item domain.TestCategory) error {
+func (u *TestCategoryUsecase) Create(item domain.TestCategory) error {
 	return u.repo.Save(item)
 }

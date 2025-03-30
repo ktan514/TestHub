@@ -8,12 +8,12 @@
 package dto
 
 type TestItemDTO struct {
-	ID              int             `json:"id"`
-	Subject         string          `json:"subject"`
-	Perspective     string          `json:"perspective"`
-	Conditions      string          `json:"conditions"`
-	Steps           string          `json:"steps"`
-	ExpectedResult  string          `json:"expectedResult"`
-	ScheduledTester UserDTO         `json:"scheduledTester"`
+	ID              string          `json:"id"`
+	Situation       string          `json:"situation"`
+	Purpose         string          `json:"purpose"`
+	Operation       string          `json:"operation"`
+	ExpResult       string          `json:"expResult"`
+	Topic           string          `json:"topic"`
 	Category        TestCategoryDTO `json:"category"`
+	ScheduledTester UserDTO         `json:"scheduledTester"`
 }

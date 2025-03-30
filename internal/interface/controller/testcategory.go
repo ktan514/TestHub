@@ -16,10 +16,10 @@ import (
 )
 
 type TestCategoryController struct {
-	usecase usecase.TestCategoryUsecase
+	usecase usecase.TestCategoryUsecaseInterface
 }
 
-func NewTestCategoryController(u usecase.TestCategoryUsecase) *TestCategoryController {
+func NewTestCategoryController(u usecase.TestCategoryUsecaseInterface) *TestCategoryController {
 	return &TestCategoryController{usecase: u}
 }
 

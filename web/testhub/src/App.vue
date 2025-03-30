@@ -4,8 +4,9 @@
       <h1>🧪 TestHub</h1>
       <nav>
         <router-link to="/">Home</router-link> |
-        <router-link to="/testItemEdit">試験項目を登録する</router-link>
-        <router-link to="/testItemList">試験項目一覧</router-link>
+        <router-link to="/testItemEdit">試験項目を登録する</router-link> |
+        <router-link to="/testItemList">試験項目一覧</router-link> |
+        <router-link to="/setting" :class="{ disabled: !isAdmin }">管理</router-link>
       </nav>
     </header>
 
@@ -16,13 +17,24 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+
+const isAdmin = ref(false);
+
+onMounted(() => {
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    const user = JSON.parse(storedUser);
+    isAdmin.value = user.role === 1;
+  }
+});
 </script>
+
 
 <style scoped>
 #app {
   font-family: 'Segoe UI', sans-serif;
   padding: 1rem;
-  max-width: 800px;
   margin: 0 auto;
 }
 

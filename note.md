@@ -1,35 +1,12 @@
-## 試験分類
-- New Items
-- Normal Pattern
-- Function A
-- Function B
-- GUI Function
+## Git commit comment Rule
 
-## 試験項目
-- Function Name
-- Keyword of Function
-- Transport Unit
-- Location
-- Situation
-- Test ID
-- Test ID(Old)
-- Transport pattern & Procedure
-  - What'sPurpose:
-  - StandardTransferPattern:
-  - SituationOfRoute:
-  - ConfigurationOfMCS:
-  - OperationTimingForThisCase:
-- Expected result
-  - ExpectedTransferRoute:
-  - TopicForBehavior:
-- Topic
-- Plan #bool
-- sim # A,R
-
-## Result
-- Version
-- Result
-- Date
-- Scheduled Tester
-- Tester
-- At Test(Comments)
+Prefix|Description
+--|--
+feat|新機能
+fix|バグの修正
+docs|ドキュメントのみの変更
+style|コードの動作に影響しない、見た目だけの変更（スペース、フォーマット、欠落の修正、セミコロンなど）
+refactor|バグの修正や機能の追加ではないコードの変更
+perf|パフォーマンスを向上させるコードの変更
+test|不足しているテストの追加や既存のテストの修正
+chore|ビルドプロセスやドキュメント生成などの補助ツールやライブラリの変更
