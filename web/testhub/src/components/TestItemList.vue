@@ -1,4 +1,5 @@
 <template>
+  <p v-if="user">ログインユーザー: {{ user.name }}</p>
   <div class="max-w-4xl mx-auto p-4">
     <h2 class="text-xl font-semibold mb-4">試験項目一覧</h2>
 
@@ -47,16 +48,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const categories = ref([]);
 const selectedCategory = ref(0);
 const testItems = ref([]);
 const selectedRows = ref([]); // 選択された行のIDを格納
+const user = computed(() => store.state.auth.user);
+
 
 onMounted(async () => {
+  if (!user.value) {
+  // 未ログインなら拒否する
+    alert('ログアウトされています。\nログインしてください。');
+  // ログイン画面に飛ばす
+    router.push({ path: '/login' });
+    return;
+  }
   // Test Categoryの選択アイテム
   await loadTestCategorySelectBox();
 });
@@ -88,7 +101,7 @@ const toggleRowSelection = (id) => {
 const handleModify = () => {
   const category = selectedCategory.value;
   const selectedIds = selectedRows.value;
-  router.push({ path: '/testItemEdit', query: { category, selectedIds } })
+  router.push({ path: '/testitem/edit', query: { category, selectedIds } })
 };
 
 // キャンセルボタン押下時の処理

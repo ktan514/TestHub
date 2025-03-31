@@ -17,53 +17,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { ref, inject } from 'vue'
+import { useRouter } from 'vue-router'
 
 // 状態を定義
-const username = ref('');
-const password = ref('');
-const loading = ref(false);
-const errorMessage = ref('');
+const loading = ref(false)
+const errorMessage = ref('')
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 // Vue Router のインスタンスを取得
-const router = useRouter();
+const router = useRouter()
+const username = ref('')
+const password = ref('')
 
 // ログイン処理
 const handleLogin = async () => {
-  loading.value = true;
-  errorMessage.value = '';
+  errorMessage.value = ''
 
   try {
-    const response = await axios.post('/api/login', {
-      username: username.value,
-      password: password.value
-    }, {
-      withCredentials: true, // クッキーを送信する
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // ログイン成功時の処理
-    console.log('ログイン成功:', response.data.message);
-    // localStorageに保存
-    const user = response.data.user;
-    localStorage.setItem('user', JSON.stringify(user));
-
+    loading.value = true
+    // ユーザー情報をストアに保存
+    const user = { username: username.value, password: password.value }
+    await store.dispatch('auth/login', user)
     // ログイン成功後、一覧画面へ遷移
-    router.push('/testItemList');
+    router.push('/testitem/list')
   } catch (error) {
-    if (error.response) {
-      errorMessage.value = error.response.data.message || 'ログインに失敗しました';
-    } else {
-      errorMessage.value = 'ネットワークエラー';
-    }
+    errorMessage.value = error.message
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped>

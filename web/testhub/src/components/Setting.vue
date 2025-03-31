@@ -1,4 +1,5 @@
 <template>
+  <p v-if="user">ログインユーザー: {{ user.name }}</p>
   <div class="settings-container">
     <h1>設定</h1>
     <ul>
@@ -16,6 +17,20 @@
 </template>
 
 <script setup>
+import { ref, onMounted, inject } from 'vue';
+import router from '@/router';
+
+const user = inject('user');
+
+onMounted(async () => {
+  if (!user.value) {
+  // 未ログインなら拒否する
+    alert('ログアウトされています。\nログインしてください。');
+  // ログイン画面に飛ばす
+    router.push({ path: '/login' });
+    return;
+  }
+});
 </script>
 
 <style scoped>

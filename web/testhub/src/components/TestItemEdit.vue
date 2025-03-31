@@ -6,7 +6,7 @@
       <div>
         <div class="form-group">
           <label class="block text-gray-700">Test ID</label>
-          <input v-model="testItem.id" type="text" class="w-full border rounded px-3 py-2" required :disabled="modify">
+          <input v-model="testItem.id" type="text" class="w-full border rounded px-3 py-2" required :readonly="modify">
         </div>
 
         <div class="form-group">
@@ -72,8 +72,12 @@
 <script setup>
 import router from '@/router';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const user = computed(() => store.state.auth.user);
 
 const route = useRoute();
 let modify = false;
@@ -105,6 +109,14 @@ const categories = ref([]);
 
 // 画面表示時にテスター一覧を読み込む想定
 onMounted(async () => {
+  if (!user.value) {
+    // 未ログインなら拒否する
+    alert('ログアウトされています。\nログインしてください。');
+    // ログイン画面に飛ばす
+    router.push({ path: '/login' });
+    return;
+  }
+
   // Test Categoryの選択アイテム
   await loadTestCategorySelectBox();
   // Scheduled Testerの選択アイテム
@@ -201,11 +213,11 @@ const nextDispTestItem = () => {
     } else {
       alert("全ての編集が完了しました。");
       // 最後のデータが終わったら一覧画面に戻る
-      router.push({ path: '/testItemList' });
+      router.push({ path: '/testitem/list' });
     }
   } else {
     // 追加モードの場合は一覧画面に戻る
-    router.push({ path: '/testItemList' });
+    router.push({ path: '/testitem/list' });
   }
 };
 </script>
