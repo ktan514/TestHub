@@ -1,27 +1,15 @@
-const state = {
-  theme: 'light',
-}
+import { defineStore } from 'pinia'
 
-const mutations = {
-  setTheme(state, theme) {
-    state.theme = theme
+export const useSettingStore = defineStore('setting', {
+  state: () => ({
+    someSetting: null, // 必要に応じて初期状態を定義
+  }),
+  getters: {
+    getSetting: (state) => state.someSetting,
   },
-}
-
-const actions = {
-  updateTheme({ commit }, theme) {
-    commit('setTheme', theme)
+  actions: {
+    setSetting(settingValue) {
+      this.someSetting = settingValue
+    },
   },
-}
-
-const getters = {
-  theme: (state) => state.theme,
-}
-
-export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
-}
+})

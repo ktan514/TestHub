@@ -17,20 +17,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
-import router from '@/router';
+import { ref, onMounted, inject } from 'vue'
+import router from '@/router'
 
-const user = inject('user');
+const user = inject('user')
 
 onMounted(async () => {
   if (!user.value) {
-  // 未ログインなら拒否する
-    alert('ログアウトされています。\nログインしてください。');
-  // ログイン画面に飛ばす
-    router.push({ path: '/login' });
-    return;
+    // 未ログインなら拒否する
+    alert('ログアウトされています。\nログインしてください。')
+    // ログイン画面に飛ばす
+    router.push({ path: '/login' })
+    return
   }
-});
+})
 </script>
 
 <style scoped>

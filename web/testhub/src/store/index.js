@@ -1,12 +1,5 @@
-import { createStore } from 'vuex'
-import auth from './auth'
-import setting from './setting'
+import { createPinia } from 'pinia'
 
-const store = createStore({
-  modules: {
-    auth,
-    setting,
-  },
-})
+const store = createPinia()
 
 export default store

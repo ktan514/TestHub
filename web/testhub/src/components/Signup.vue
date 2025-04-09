@@ -21,44 +21,48 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const username = ref('');
-const password = ref('');
-const confirmPassword = ref('');
-const loading = ref(false);
-const errorMessage = ref('');
-const router = useRouter();
+const username = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const loading = ref(false)
+const errorMessage = ref('')
+const router = useRouter()
 
 const handleSignUp = async () => {
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'パスワードが一致しません';
-    return;
+    errorMessage.value = 'パスワードが一致しません'
+    return
   }
 
-  loading.value = true;
-  errorMessage.value = '';
+  loading.value = true
+  errorMessage.value = ''
 
   try {
-    await axios.post('/api/login', {
-      username: username.value,
-      password: password.value
-    }, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    await axios.post(
+      '/api/login',
+      {
+        username: username.value,
+        password: password.value,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
 
-    router.push('/login'); // 登録後にログイン画面へ遷移
+    router.push('/login') // 登録後にログイン画面へ遷移
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'サインアップに失敗しました';
+    errorMessage.value = error.response?.data?.message || 'サインアップに失敗しました'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped>

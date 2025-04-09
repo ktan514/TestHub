@@ -10,16 +10,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-const router = useRouter()
-const store = useStore()
+import { useAuthStore } from '@/store/auth'
 
-const onLogout = async () => {
+const router = useRouter()
+const authStore = useAuthStore()
+
+const onLogout = () => {
   if (confirm('ログアウトしますか?')) {
     try {
-      await store.dispatch('auth/logout')
+      authStore.logout()
       router.push('/login') // ログアウト後にログイン画面へ遷移
     } catch (error) {
       console.error('ログアウトに失敗しました:', error)

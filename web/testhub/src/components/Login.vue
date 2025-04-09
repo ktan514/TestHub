@@ -17,20 +17,18 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import router from '@/router'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
 
-// 状態を定義
-const loading = ref(false)
-const errorMessage = ref('')
-import { useStore } from 'vuex'
+const authStore = useAuthStore()
+const route = useRoute()
 
-const store = useStore()
-
-// Vue Router のインスタンスを取得
-const router = useRouter()
 const username = ref('')
 const password = ref('')
+const loading = ref(false)
+const errorMessage = ref('')
 
 // ログイン処理
 const handleLogin = async () => {
@@ -38,11 +36,13 @@ const handleLogin = async () => {
 
   try {
     loading.value = true
-    // ユーザー情報をストアに保存
     const user = { username: username.value, password: password.value }
-    await store.dispatch('auth/login', user)
-    // ログイン成功後、一覧画面へ遷移
-    router.push('/testitem/list')
+
+    await authStore.login(user) // Pinia store の login を呼び出す
+
+    // ログイン成功後にリダイレクト先があればそこに、なければデフォルトページへ
+    const redirectPath = route.query.redirect || '/testitem/list'
+    router.push(redirectPath)
   } catch (error) {
     errorMessage.value = error.message
   } finally {

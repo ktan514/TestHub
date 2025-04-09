@@ -2,7 +2,7 @@
   <TestItemForm
     :testItem="testItem"
     :categories="categories"
-    :formTitle="'試験アイテム編集'"
+    :formTitle="'試験アイテム追加'"
     @submitTestItem="submitTestItem"
   />
 </template>
@@ -29,24 +29,18 @@ const categories = ref([])
 
 onMounted(async () => {
   await loadTestCategorySelectBox()
-  await loadTestItem()
 })
 
 const loadTestCategorySelectBox = async () => {
   categories.value = await axios.get('/api/categories').then((res) => res.data)
 }
 
-const loadTestItem = async () => {
-  const response = await axios.get(`/api/testitem?id=${selectedTestItemId}`)
-  testItem.value = response.data
-}
-
 const submitTestItem = async () => {
   try {
-    await axios.put(`/api/testitem/${testItem.value.id}`, testItem.value)
-    alert('更新が完了しました')
+    await axios.post('/api/testitem', testItem.value)
+    alert('登録が完了しました')
   } catch (error) {
-    alert('更新に失敗しました')
+    alert('登録に失敗しました')
   }
 }
 </script>
