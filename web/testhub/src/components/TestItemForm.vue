@@ -26,6 +26,17 @@
         </select>
       </div>
 
+      <!-- Scheduled Tester -->
+      <div class="form-group">
+        <label class="block text-gray-700">Scheduled Tester</label>
+        <select v-model="testItem.scheduledTester" class="w-full border rounded px-3 py-2">
+          <option value="" disabled>選択してください</option>
+          <option v-for="tester in scheduledTesters" :key="tester.id" :value="tester">
+            {{ tester.name }}
+          </option>
+        </select>
+      </div>
+
       <!-- Other fields (Situation, Purpose, etc.) -->
       <div class="form-group" v-for="(field, index) in fields" :key="index">
         <label class="block text-gray-700">{{ field.label }}</label>
@@ -52,7 +63,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
 const testItem = ref({
   id: '',
@@ -68,6 +80,7 @@ const testItem = ref({
 })
 
 const categories = ref([])
+const scheduledTesters = ref([])
 
 const fields = [
   { label: 'Situation', model: 'situation' },
@@ -81,14 +94,47 @@ const formTitle = '試験アイテム登録'
 
 const modify = ref(false)
 
-const submitTestItem = () => {
-  console.log('登録する試験アイテム:', testItem.value)
-  // 送信処理をここに記述
-}
+onMounted(async () => {
+  // Test Categoryの選択アイテム
+  await loadTestCategorySelectBox()
+  // Scheduled Testerの選択アイテム
+  await loadScheduledTesterSelectBox()
+})
 
 const handleCancel = () => {
   // 戻る処理をここに記述
 }
+
+const loadTestCategorySelectBox = async () => {
+  categories.value = await axios.get('/api/categories').then((res) => res.data)
+}
+
+// 予定テスター選択ボックスの要素を取得する
+const loadScheduledTesterSelectBox = async () => {
+  scheduledTesters.value = await axios.get('/api/users').then((res) => res.data)
+  console.log(scheduledTesters.value)
+}
+
+// フォーム送信時の処理
+const submitTestItem = async () => {
+  console.log('登録する試験アイテム:', testItem.value)
+  // ここでAPI呼び出しやバリデーション処理を実行
+  try {
+    const result = await axios.post('/api/testitem', testItem.value).then((res) => res.data)
+    alert('登録が完了しました。')
+    console.log(result)
+
+    // 正常時のコールバック関数
+    if (props.nextDispTestItem) {
+      props.nextDispTestItem()
+    }
+  } catch (error) {
+    alert('登録にエラーが発生しました。')
+    console.error(error)
+  }
+}
+
+const props = defineProps(['onNext'])
 </script>
 
 <style scoped>

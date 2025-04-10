@@ -1,46 +1,39 @@
 <template>
-  <TestItemForm
-    :testItem="testItem"
-    :categories="categories"
-    :formTitle="'試験アイテム追加'"
-    @submitTestItem="submitTestItem"
-  />
+  <TestItemForm :formTitle="'試験アイテム登録'" :modify="false" />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import TestItemForm from '@/components/TestItemForm.vue'
+import { useAuthStore } from '@/store/auth'
+import router from '@/router'
+import { useRoute } from 'vue-router'
 
-const testItem = ref({
-  id: '',
-  situation: '',
-  purpose: '',
-  operation: '',
-  expResult: '',
-  topic: '',
-  category: {
-    id: 0,
-    name: '',
-  },
-})
-
-const categories = ref([])
+const authStore = useAuthStore()
+const user = computed(() => authStore.user)
+const route = useRoute()
 
 onMounted(async () => {
-  await loadTestCategorySelectBox()
+  if (!user.value) {
+    // 未ログインなら拒否する
+    alert('ログアウトされています。\nログインしてください。')
+    // ログイン画面に飛ばす
+    router.push({ path: '/login' })
+    return
+  }
+
+  // クエリパラメータを読み込む
+  await loadQueryParam()
 })
 
-const loadTestCategorySelectBox = async () => {
-  categories.value = await axios.get('/api/categories').then((res) => res.data)
-}
+// クエリパラメータからデータを取得する
+const loadQueryParam = async () => {
+  // クエリパラメータから取得する
 
-const submitTestItem = async () => {
-  try {
-    await axios.post('/api/testitem', testItem.value)
-    alert('登録が完了しました')
-  } catch (error) {
-    alert('登録に失敗しました')
+  // カテゴリー
+  if (route.query.category) {
+    Number(route.query.category)
   }
 }
 </script>
